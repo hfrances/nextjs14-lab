@@ -1,5 +1,5 @@
 import InvitationFormServer from "@/app/ui/people/InvitationFormServer";
-import { addPerson, addPersonWithRedirect } from "@/app/lib/actions/people-alt";
+import { addPersonWithRedirect } from "@/app/lib/actions/people-alt";
 
 export default async function NewPersonPage() {
   return (

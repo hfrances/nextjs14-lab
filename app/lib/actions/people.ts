@@ -50,13 +50,13 @@ const addPerson = async (person: CreatePerson, revalidate?: { originalPath: stri
 }
 
 const editPerson = (person: Person) => {
-
+  throw new Error(`Not implemented exception: ${person.id}`);
 }
 
 const deletePerson = async (person: Person, revalidate?: { originalPath: string, type?: "layout" | "page" }): Promise<{ success: boolean, error?: any }> => {
 
   return deleteUser(person.id)
-    .then(_ => {
+    .then(() => {
       if (revalidate) {
         console.log(revalidate);
         revalidatePath(revalidate.originalPath, revalidate.type);

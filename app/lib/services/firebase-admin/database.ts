@@ -1,4 +1,4 @@
-import admin, { firestore } from "firebase-admin"; // Importa desde firebase-admin/firestore
+import admin from "firebase-admin"; // Importa desde firebase-admin/firestore
 import { cert, initializeApp } from "firebase-admin/app"; // Importa desde firebase-admin/firestore
 import serviceAccountKey from './serviceAccountKey.json';
 

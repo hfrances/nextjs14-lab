@@ -34,7 +34,7 @@ export default function InvitationForm({ redirectPath, revalidate, createAction 
     e.preventDefault();
 
     if (isFormValid) {
-      const { nombre, apellidos, email, telefono } = formData;
+      const { nombre, email } = formData;
 
       if (!nombre || !email) {
         toast.error('Rellene todos los campos obligatorios');

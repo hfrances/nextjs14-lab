@@ -41,7 +41,7 @@ const deletePerson = async (person?: Person): Promise<{ success: boolean, error?
 
   if (person) {
     return deleteUser(person.id)
-      .then(_ => {
+      .then(() => {
         return { success: true };
       }, error => {
         return { success: false, error: error?.message || error };
