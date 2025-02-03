@@ -1,21 +1,26 @@
 import { Person } from "@/app/types/person";
 import PersonCard from "./PersonCard";
 import { UrlObject } from "url";
+import { DeletePersonDelegate } from "@/app/lib/actions/people";
 
 type PeopleTableProps = {
   revalidatePath: string;
   revalidate: "layout" | "page";
   query: string | undefined;
   page: number;
-  actionLoad: (query: string | undefined, page: number) => Promise<Person[]>;
+  serviceLoad: (query: string | undefined, page: number) => Promise<Person[]>;
   actionEdit: (person: Person) => string | UrlObject;
-  actionDelete: (person: Person, revalidate?: { originalPath: string, type?: "layout" | "page" }) => Promise<{ success: boolean, error?: any }>;
-  delay?:number
+  actionDelete: DeletePersonDelegate;
+  delay?: number
 }
 
-const PeopleTable = async ({ revalidatePath, revalidate, query, page, actionLoad, actionEdit, actionDelete, delay= 1000 }: PeopleTableProps) => {
-  //const peopleList = await actionLoad(query, page);
-  const peopleList = await new Promise<Person[]>(resolve => setTimeout(() => actionLoad(query, page).then(resolve), delay))
+/**
+ * Un React Component que carga y muestra una lista de `Person`.
+ * 
+ * Se renderiza en el lado del **servidor**.
+ */
+const PeopleTable = async ({ revalidatePath, revalidate, query, page, serviceLoad, actionEdit, actionDelete, delay = 1000 }: PeopleTableProps) => {
+  const peopleList = await new Promise<Person[]>(resolve => setTimeout(() => serviceLoad(query, page).then(resolve), delay))
 
   return (
     <>

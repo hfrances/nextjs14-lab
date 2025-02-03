@@ -4,15 +4,23 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import { toast } from "sonner";
 import { UserIcon, EnvelopeOpenIcon, PhoneIcon } from "@heroicons/react/24/outline";
-import { CreatePerson, CreatePersonResult } from "@/app/lib/actions/people";
+import { CreatePersonDelegate } from "@/app/lib/actions/people";
 
 type InvitationFormProps = {
   redirectPath: string;
   revalidate: "none" | "layout" | "page";
-  createAction: (person: CreatePerson, revalidate?: { originalPath: string, type?: "layout" | "page" }) => Promise<CreatePersonResult>;
+  actionCreate: CreatePersonDelegate;
 }
 
-export default function InvitationForm({ redirectPath, revalidate, createAction }: InvitationFormProps) {
+/**
+ * Un formulario que se ejecuta desde el lado del cliente.
+ * 
+ * Realiza algunas comprobaciones y transformación de datos antes de la llamada a `actionCreate` 
+ * y algunas acciones de control sobre la respuesta después.
+ * 
+ * Se renderiza en el lado del **cliente**.
+ */
+export default function InvitationForm({ redirectPath, revalidate, actionCreate }: InvitationFormProps) {
   const [formData, setFormData] = useState({
     nombre: "",
     apellidos: "",
@@ -41,7 +49,7 @@ export default function InvitationForm({ redirectPath, revalidate, createAction 
         return;
       }
 
-      const result = await createAction(
+      const result = await actionCreate(
         formData,
         revalidate != "none" ? {
           originalPath: redirectPath, type: revalidate
@@ -63,6 +71,9 @@ export default function InvitationForm({ redirectPath, revalidate, createAction 
       <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8">
         <p className="text-center text-gray-600 dark:text-gray-400 text-xl mb-6 font-bold">
           Qué simpático es:
+        </p>
+        <p className="text-center text-gray-600 dark:text-gray-400 text-basic mb-6 font-bold">
+          (form en cliente)
         </p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="relative">

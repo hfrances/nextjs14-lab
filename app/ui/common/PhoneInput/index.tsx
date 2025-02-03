@@ -11,6 +11,8 @@ interface PhoneInputSimpleProps extends Omit<React.InputHTMLAttributes<HTMLInput
 };
 
 /**
+ * Un React Component que extiende el elemento HTML `input` diseñado para introducir números de teléfono 
+ * que permite identificar su país y validar su formato.
  * @requires libphonenumber-js 
  * @requires i18n-iso-countries
  */

@@ -5,7 +5,15 @@ import { stringInitials, stringRemoveAccents } from "@/app/lib/utils/string.util
 import { SubmitWithAction } from "@/app/lib/utils/actions.utils";
 import { Person } from "@/app/types/person";
 
-const addPerson = async (formData: FormData): Promise<string> => {
+/* 
+ * Contiene acciones para '/people/new-alt'.
+ * Las acciones se hacen en el lado del servidor mediante server actions, pero los componentes de cliente son genéricos.
+ * Las firmas de los métodos se supeditan a las que necesiten los componentes cliente.
+ * No se pueden manejar las respuestas.
+ */
+
+type CreatePersonDelegate = (formData: FormData) => void;
+const createPersonAction : CreatePersonDelegate = async (formData)=> {
   const nombre = formData.get("nombre") as string | null;
   const apellidos = formData.get("apellidos") as string | null;
   const email = formData.get("email") as string | null;
@@ -37,7 +45,8 @@ const addPerson = async (formData: FormData): Promise<string> => {
   }
 }
 
-const deletePerson = async (person?: Person): Promise<{ success: boolean, error?: any }> => {
+type DeletePersonDelegate = (person?: Person) => Promise<{ success: boolean, error?: any }>;
+const deletePersonAction : DeletePersonDelegate = async (person) => {
 
   if (person) {
     return deleteUser(person.id)
@@ -52,7 +61,8 @@ const deletePerson = async (person?: Person): Promise<{ success: boolean, error?
   }
 }
 
-const addPersonWithRedirect = SubmitWithAction(addPerson, "redirect", "/people", "page");
-const deletePersonWithRevalidate = SubmitWithAction(deletePerson, "revalidate", "/people", "page");
+const createPersonActionWithRedirect = SubmitWithAction(createPersonAction, "redirect", "/people", "page");
+const deletePersonActionWithRevalidate = SubmitWithAction(deletePersonAction, "revalidate", "/people", "page");
 
-export { addPersonWithRedirect, deletePersonWithRevalidate }
+export type { CreatePersonDelegate, DeletePersonDelegate }
+export { createPersonActionWithRedirect, deletePersonActionWithRevalidate }

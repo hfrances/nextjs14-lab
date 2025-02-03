@@ -16,6 +16,11 @@ function getVariant(variant: 'primary' | 'danger' | 'secondary') {
   return variants[variant];
 }
 
+/**
+ * Un React Component que extiende de `<Link>` pero con la apariencia de un botón.
+ * 
+ * It is the primary way to navigate between routes in Next.js.
+ */
 function ButtonLink({ variant = 'primary', className, disabled, children, ...props }: ButtonLinkProps) {
 
   return (

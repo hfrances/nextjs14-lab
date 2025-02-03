@@ -16,7 +16,7 @@ function like(collection: FirebaseFirestore.Query, field: string | undefined, va
   return query;
 }
 
-export async function getUsers(queryString: string | undefined): Promise<Person[]> {
+export async function getUsers(queryString: string | undefined, page: number): Promise<Person[]> {
   const query = like(collection, "name_normalized", queryString);
   const snapshot = await query.get();
 

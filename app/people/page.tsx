@@ -1,18 +1,26 @@
 import { Suspense } from "react";
 import { Button, ButtonLink, Search } from "@/app/ui/common";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { deletePerson } from "@/app/lib/actions/people";
-import { deletePersonWithRevalidate } from "@/app/lib/actions/people-alt";
+import { deletePersonAction } from "@/app/lib/actions/people";
+import { deletePersonActionWithRevalidate } from "@/app/lib/actions/people-alt";
 import Avatar from "@/app/ui/people/Avatar";
 import PeopleTable from "@/app/ui/people/PeopleTable";
 import PeopleTableSkeleton from "@/app/ui/people/PeopleTableSkeleton";
+import { Person } from "../types/person";
 import { getUsers } from "@/app/lib/services/firebase-admin";
-//import DeleteButton from "../components/people/DeleteButton";
-//import DeleteButton from "../components/people/DeleteButtonWithModal";
 //import { getUsers } from "@/app/lib/services/gorest";
 
+/**
+ * Muestra dos listas de personas que cargan de forma diferente:
+ * 
+ * Por un lado una lista que se renderiza en base a componentes. Estos componentes cargan los datos de forma asíncrona y
+ * se muestra un skeleton durante la carga. Las acciones de CRUD están definidas sobre el componente padre y se van pasando a sus 
+ * correspodientes hijos.
+ * 
+ * Por otro lado una lista que se renderiza directamente sobre la página, evitando componetizar lo máximo posible.
+ */
 export default async function PeoplePage({ searchParams: { query, page } }: { searchParams: { query: string | undefined, page: string | undefined } }) {
-  const peopleList = await getUsers(query);
+  const peopleList = await new Promise<Person[]>(resolve => setTimeout(() => getUsers(query, Number(page) || 1).then(resolve), 1000))
 
   return (
     <div className="w-full font-[family-name:var(--font-geist-sans)] p-8">
@@ -22,7 +30,10 @@ export default async function PeoplePage({ searchParams: { query, page } }: { se
       <div className="mt-2 flex items-center justify-between gap-2 md:mt-4">
         <Search searchParam="query" placeholder="Buscar personas..." autoFocus />
         <ButtonLink href="/people/new" className="flex bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline-blue-600">
-          <span className="hidden md:block mr-2">Añadir simpático</span><PlusIcon className="h-5" />
+          <span className="hidden md:block mr-2">Añadir</span><PlusIcon className="h-5" />
+        </ButtonLink>
+        <ButtonLink href="/people/new-alt" className="flex bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-500 focus-visible:outline-blue-600">
+          <span className="hidden md:block mr-2">Añadir (alt)</span><PlusIcon className="h-5" />
         </ButtonLink>
       </div>
 
@@ -38,10 +49,10 @@ export default async function PeoplePage({ searchParams: { query, page } }: { se
               revalidatePath="/people"
               revalidate="page"
               query={query}
-              page={Number(page)}
-              actionLoad={getUsers}
-              actionEdit={person => `/people/edit/${person.id}`}
-              actionDelete={deletePerson}
+              page={Number(page) || 1}
+              serviceLoad={getUsers}
+              actionEdit={person => `/people/edit/${person.id}`} // SSR
+              actionDelete={deletePersonAction}
               delay={1000}
             />
           </Suspense>
@@ -71,8 +82,7 @@ export default async function PeoplePage({ searchParams: { query, page } }: { se
                 <ButtonLink variant="secondary" href={`/people/edit/${person.id}`} disabled>
                   Editar
                 </ButtonLink>
-                {/*<DeleteButton person={person} actionDelete={deletePerson} revalidate="page" revalidatePath="/people" />*/}
-                <Button data={person} variant="danger" data-info={person.id} onAction={deletePersonWithRevalidate}>
+                <Button variant="danger" data={person} onAction={deletePersonActionWithRevalidate}>
                   Eliminar
                 </Button>
               </div>

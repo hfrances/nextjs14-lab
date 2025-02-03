@@ -1,17 +1,23 @@
 import { Person } from "@/app/types/person";
 import { UrlObject } from "url";
-import { Button, ButtonLink } from "@/app/ui/common";
-import DeleteButton from "./DeleteButtonWithModal";
+import { ButtonLink } from "@/app/ui/common";
+import { DeletePersonDelegate } from "@/app/lib/actions/people";
 import Avatar from "./Avatar";
+import DeleteButtonWithModal from "./DeleteButtonWithModal";
 
 interface PersonCardProps {
   revalidatePath: string;
   revalidate: "layout" | "page";
   person: Person;
   actionEdit: string | UrlObject;
-  actionDelete?: (person: Person, revalidate?: { originalPath: string, type?: "layout" | "page" }) => Promise<{ success: boolean, error?: any }>;
+  actionDelete?: DeletePersonDelegate;
 }
 
+/**
+ * Un React Component que muestra la información de un `Person`.
+ * 
+ * Se renderiza en el lado del **servidor**.
+ */
 export default function PersonCard({ revalidatePath, revalidate, person, actionEdit, actionDelete }: PersonCardProps) {
   return (
     <div className="bg-white p-4 rounded-lg shadow flex flex-col justify-between items-center space-x-4 sm:flex-row">
@@ -31,10 +37,7 @@ export default function PersonCard({ revalidatePath, revalidate, person, actionE
         <ButtonLink variant="secondary" href={actionEdit} disabled>
           Editar
         </ButtonLink>
-        <DeleteButton person={person} actionDelete={actionDelete} revalidatePath={revalidatePath} revalidate={revalidate} />
-        {/*<Button variant="danger" onClick={onDelete}>
-          Eliminar
-        </Button>*/}
+        <DeleteButtonWithModal person={person} actionDelete={actionDelete} revalidatePath={revalidatePath} revalidate={revalidate} />
       </div>
     </div>
   );
