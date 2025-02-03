@@ -16,6 +16,10 @@ type SearchProps = Omit<React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLIn
 }
 
 /**
+ * Un React Component que extiende el elemento HTML `input`, diseñado para hacer búsquedas.
+ * 
+ * El valor del componente se aplica en la ruta del navegador y viceversa.
+ *  
  * @requires use-debounce
  */
 const Search = ({ searchParam, waitDelay = 300, className, ...props }: SearchProps) => {

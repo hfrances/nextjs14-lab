@@ -8,6 +8,10 @@ interface ButtonProps<TEntity> extends React.ButtonHTMLAttributes<HTMLButtonElem
   onAction?: (data?: TEntity) => void
 }
 
+/**
+ * A React component that extends the HTML `<button>` element to provide variant styles and the `onAction` callback with customized `data`.
+ *
+ */
 function Button<TEntity = any>({ data, variant = 'primary', className, children, onAction, onClick, ...props }: ButtonProps<TEntity>) {
 
   const handleButton = onAction ? (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -10,6 +10,11 @@ type DeleteButtonProps = {
   actionDelete?: (person: Person, revalidate?: { originalPath: string, type?: "layout" | "page" }) => Promise<{ success: boolean, error?: any }>;
 }
 
+/**
+ * Un React Component que extiende la funcionalidad del componente `Button` para eliminar un elemento.
+ * 
+ * Se renderiza en el lado del **cliente**.
+ */
 const DeleteButton = ({ revalidatePath, revalidate, person, actionDelete }: DeleteButtonProps) => {
 
   const handleButton = () => {

@@ -6,6 +6,13 @@ interface AvatarProps {
   className?: string;
 }
 
+/**
+ * Un React Component para visualizar el avatar de un usuario.
+ * 
+ * En caso de no tener avatar, se mostrará un avatar por defecto.
+ * 
+ * Se renderiza en el lado del **servidor**.
+ */
 function Avatar({ avatarUrl, name, className = '' }: AvatarProps) {
   return (
     <>

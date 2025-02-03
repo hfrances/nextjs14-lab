@@ -1,11 +1,18 @@
+import { CreatePersonDelegate } from "@/app/lib/actions/people-alt";
 import { UserIcon, EnvelopeOpenIcon, PhoneIcon } from "@heroicons/react/24/outline";
 
 type InvitationFormProps = {
-  createAction: (formData: FormData) => void;
+  actionCreate: CreatePersonDelegate;
 }
 
-export default function InvitationFormServer({ createAction }: InvitationFormProps) {
-
+/**
+ * Un formulario que se renderiza desde el lado del servidor.
+ * 
+ * En el submit realizará la llamada a `actionCreate`. No ejecuta nada de código en el lado de cliente. 
+ * 
+ * Se renderiza en el lado del **servidor**.
+ */
+export default function InvitationFormServer({ actionCreate }: InvitationFormProps) {
 
   return (
     <main className="flex items-center justify-center p-6">
@@ -13,7 +20,10 @@ export default function InvitationFormServer({ createAction }: InvitationFormPro
         <p className="text-center text-gray-600 dark:text-gray-400 text-xl mb-6 font-bold">
           Qué simpático es:
         </p>
-        <form action={createAction} className="space-y-4">
+        <p className="text-center text-gray-600 dark:text-gray-400 text-basic mb-6 font-bold">
+          (form en server side)
+        </p>
+        <form action={actionCreate} className="space-y-4">
           <div className="relative">
             <input
               type="text"

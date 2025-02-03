@@ -1,4 +1,10 @@
 
+
+/**
+ * Un React Component que representa un Skeleton de `PersonCard`.
+ * 
+ * Se renderiza en el lado del **servidor**.
+ */
 const PersonCardSkeleton = () => {
   return (
     <div className="bg-white p-4 rounded-lg shadow flex justify-between items-center space-x-4 animate-pulse">

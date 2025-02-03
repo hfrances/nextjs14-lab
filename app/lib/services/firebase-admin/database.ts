@@ -26,4 +26,4 @@ const app =
     })
   });
 
-export const db = admin.firestore(app); // Obtén una referencia a Firestore
+export const db = admin.firestore(); // Obtén una referencia a Firestore

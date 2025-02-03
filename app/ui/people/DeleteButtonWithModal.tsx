@@ -3,15 +3,23 @@
 import { useState } from "react";
 import { Person } from "@/app/types/person";
 import { Button } from "@/app/ui/common";
+import { DeletePersonDelegate } from "@/app/lib/actions/people";
 
 type DeleteButtonProps = {
   revalidatePath: string;
   revalidate: "layout" | "page";
   person: Person,
-  actionDelete?: (person: Person, revalidate?: { originalPath: string, type?: "layout" | "page" }) => Promise<{ success: boolean, error?: any }>;
+  actionDelete?: DeletePersonDelegate;
 }
 
-const DeleteButton = ({ revalidatePath, revalidate, person, actionDelete }: DeleteButtonProps) => {
+/**
+ * Un React Component que extiende la funcionalidad del componente `Button` para eliminar un elemento desde el lado del cliente.
+ * 
+ * Incluye una ventana modal de confirmación antes del borrado.
+ * 
+ * Se renderiza en el lado del **cliente**.
+ */
+const DeleteButtonWithModal = ({ revalidatePath, revalidate, person, actionDelete }: DeleteButtonProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleConfirm = () => {
@@ -66,5 +74,5 @@ const DeleteButton = ({ revalidatePath, revalidate, person, actionDelete }: Dele
   )
 }
 
-export { DeleteButton };
-export default DeleteButton;
+export { DeleteButtonWithModal };
+export default DeleteButtonWithModal;

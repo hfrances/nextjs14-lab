@@ -5,6 +5,13 @@ import { addUser, deleteUser } from "@/app/lib/services/firebase-admin";
 import { stringInitials, stringRemoveAccents } from "@/app/lib/utils/string.utils";
 import { revalidatePath } from "next/cache";
 
+/* 
+ * Contiene acciones para '/people/new'.
+ * Las acciones se hacen en el lado del servidor mediante server actions, pero se lanzan desde componentes de cliente propios.
+ * Se pueden personalizar los objetos que se mandan a las funciones y sus valores de retorno.
+ * Se pueden manejar las respuestas en el lado del cliente.
+ */
+
 type CreatePerson = {
   nombre: string;
   apellidos: string;
@@ -17,7 +24,8 @@ type CreatePersonResult = {
   error?: any | undefined
 }
 
-const addPerson = async (person: CreatePerson, revalidate?: { originalPath: string, type?: "layout" | "page" }): Promise<CreatePersonResult> => {
+type CreatePersonDelegate = (person: CreatePerson, revalidate?: { originalPath: string, type?: "layout" | "page" }) => Promise<CreatePersonResult>;
+const createPersonAction: CreatePersonDelegate = async (person, revalidate) => {
 
   if (!person.nombre || !person.email) {
     return { success: false, error: "Revise los campos obligatorios" };
@@ -49,11 +57,13 @@ const addPerson = async (person: CreatePerson, revalidate?: { originalPath: stri
 
 }
 
-const editPerson = (person: Person) => {
+type EditPersonDelegate = (person: Person) => Promise<{ success: boolean, error?: any }>;
+const editPersonAction: EditPersonDelegate = (person) => {
   throw new Error(`Not implemented exception: ${person.id}`);
 }
 
-const deletePerson = async (person: Person, revalidate?: { originalPath: string, type?: "layout" | "page" }): Promise<{ success: boolean, error?: any }> => {
+type DeletePersonDelegate = (person: Person, revalidate?: { originalPath: string, type?: "layout" | "page" }) => Promise<{ success: boolean, error?: any }>;
+const deletePersonAction: DeletePersonDelegate = async (person, revalidate) => {
 
   return deleteUser(person.id)
     .then(() => {
@@ -67,5 +77,5 @@ const deletePerson = async (person: Person, revalidate?: { originalPath: string,
     });
 }
 
-export type { CreatePerson, CreatePersonResult };
-export { addPerson, editPerson, deletePerson };
+export type { CreatePerson, CreatePersonDelegate, CreatePersonResult, EditPersonDelegate, DeletePersonDelegate };
+export { createPersonAction, editPersonAction, deletePersonAction };
